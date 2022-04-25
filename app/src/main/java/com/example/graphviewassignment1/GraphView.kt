@@ -12,6 +12,8 @@ import kotlin.math.absoluteValue
 
 @SuppressLint("AppCompatCustomView")
 class GraphView(context: Context, attributeSet: AttributeSet?) : ImageView(context, attributeSet) {
+    var bgLines = Paint(Paint.HINTING_OFF)
+    var backgroundLinesColor = Color.CYAN
 
     var values: Array<Int>? = null
         set(value) {
@@ -21,6 +23,8 @@ class GraphView(context: Context, attributeSet: AttributeSet?) : ImageView(conte
     var paint = Paint()
 
     init {
+        bgLines.color = backgroundLinesColor
+        bgLines.textSize=40F
         paint.setColor(Color.RED)
     }
 
@@ -33,11 +37,41 @@ class GraphView(context: Context, attributeSet: AttributeSet?) : ImageView(conte
         if (values == null) {
             return
         }
-
+var yAxisLine=height.toFloat()/12;
         var barWidth = width / values!!.size
         var percentageHeight = height / 100
+        canvas?.drawLine(0F,height.toFloat(),width.toFloat(),height.toFloat(),bgLines)
+        for (i in 0 until 12){
+            canvas?.drawLine(0F,
+                yAxisLine*i,
+                width.toFloat(),
+                yAxisLine*i,
+                bgLines)
+        }
 
-        var left = 0
+        canvas?.drawText("100", 0F,25F, bgLines)
+        for(i in 0 until 140 step 10) {
+            canvas?.drawText(
+                i.toString(),
+                0F,
+                height - (yAxisLine * (i/10)),
+                bgLines)
+
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+                var left = 0
 
         var random = Random()
 
@@ -47,7 +81,7 @@ class GraphView(context: Context, attributeSet: AttributeSet?) : ImageView(conte
 
             canvas!!.drawRect(
                 left.toFloat(), (height - percentageHeight * values!![i]).toFloat() ,
-                left + barWidth.toFloat() -5, height.toFloat(),
+                left + barWidth.toFloat() -10, height.toFloat(),
                 paint
             )
             left += barWidth
